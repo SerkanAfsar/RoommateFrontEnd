@@ -3,6 +3,8 @@ import styles from '../styles/Home.module.scss'
 
 export default function Home() {
   return (
-    <div>Hello World</div>
+    <div className='container'>
+      <h1>Hello World</h1>
+    </div>
   )
 }
