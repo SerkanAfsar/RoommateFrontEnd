@@ -2,12 +2,13 @@ import React, { createContext, useEffect, useState } from "react";
 
 export const AppContext = createContext();
 
-const ContextProvider = ({ children }) => {
-
+const AppContextProvider = ({ children }) => {
     const [mode, setMode] = useState(false);
+
     useEffect(() => {
         localStorage.setItem("mode", mode);
-    }, [mode])
+    }, [mode]);
+
 
     return (
         <AppContext.Provider value={{ mode, setMode }}>
@@ -15,4 +16,4 @@ const ContextProvider = ({ children }) => {
         </AppContext.Provider>
     );
 }
-export default ContextProvider;
+export default AppContextProvider;
