@@ -6,7 +6,8 @@
       "@/Components/*": ["Components/*"],
       "@/Helpers/*": ["Helpers/*"],
       "@/Contexts*": ["Contexts/*"],
-      "@/Store*": ["Store/*"]
+      "@/Store*": ["Store/*"],
+      "@/DataFetch*": ["DataFetch/*"]
     }
   }
 }
