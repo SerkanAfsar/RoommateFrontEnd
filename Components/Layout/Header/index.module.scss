@@ -1,0 +1,9 @@
+@use "../../../styles/base/mixins" as *;
+
+.header {
+    position: relative;
+    @include flexCenter;
+    width: 100%;
+    min-height: 50px;
+    padding: 10px;
+}
