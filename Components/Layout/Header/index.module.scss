@@ -4,6 +4,32 @@
     position: relative;
     @include flexCenter;
     width: 100%;
-    min-height: 50px;
-    padding: 10px;
+
+    .nav {
+        @include flexBetween;
+        @include smallDevice {
+            @include flexColumn;
+        }
+        .navBrand {
+            font-size: 23px;
+            color: #000;
+            font-weight: bold;
+        }
+        ul {
+            @include flexBetween;
+            @include smallDevice {
+                @include flexColumn;
+            }
+            li {
+                a {
+                    display: block;
+                    color: #000;
+                    padding: 20px 10px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    border-right: 1px solid #ddd;
+                }
+            }
+        }
+    }
 }
