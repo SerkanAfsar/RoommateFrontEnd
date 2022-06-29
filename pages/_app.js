@@ -1,11 +1,14 @@
 import AppContextProvider from "../Contexts";
 import "bootstrap/dist/css/bootstrap.min.css";
 import '../styles/globals.scss'
+import Layout from "@/Components/Layout";
 
 function MyApp({ Component, pageProps }) {
   return (
     <AppContextProvider>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </AppContextProvider>
   )
 }
