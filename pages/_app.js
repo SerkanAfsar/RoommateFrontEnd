@@ -1,16 +1,17 @@
 import AppContextProvider from "../Contexts";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import '../styles/globals.scss'
 import Layout from "@/Components/Layout";
+import { NextUIProvider } from '@nextui-org/react';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AppContextProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </AppContextProvider>
+    <NextUIProvider>
+      <AppContextProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AppContextProvider>
+    </NextUIProvider>
   )
 }
 

@@ -10,6 +10,7 @@
         @include smallDevice {
             @include flexColumn;
         }
+        padding: 20px 0px;
         .navBrand {
             font-size: 23px;
             color: #000;
@@ -22,12 +23,35 @@
             }
             li {
                 a {
-                    display: block;
-                    color: #000;
-                    padding: 20px 10px;
-                    font-weight: bold;
-                    font-size: 14px;
-                    border-right: 1px solid #ddd;
+                    border-radius: 5px;
+                    border: 1px solid #000;
+                    padding: 5px 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-left: 10px;
+                    i {
+                        font-size: 16px;
+                        position: relative;
+                    }
+                    span {
+                        padding-left: 5px;
+                        margin-left: 5px;
+                        position: relative;
+                        font-size: 13px;
+                        &::before {
+                            content: "";
+                            position: absolute;
+                            top: 10px;
+                            left: 0px;
+                            width: 0.5px;
+                            height: 60%;
+                            top: 50%;
+                            border: none;
+                            transform: translate(-50%, -50%);
+                            background: #000;
+                        }
+                    }
                 }
             }
         }
