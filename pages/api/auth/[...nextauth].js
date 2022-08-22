@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 // import { defaultInstace } from "../../../Utilities";
+import { defaultInstace } from '@/Utilities/AxiosInstance';
 
 export default NextAuth({
     pages: {
@@ -14,19 +15,16 @@ export default NextAuth({
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
+                const result = await defaultInstace.post(`/auth/local`, {
+                    identifier: credentials.username,
+                    password: credentials.password
+                }).then(data => {
+                    return data?.data;
+                }).catch((err) => {
+                    return null;
+                });
 
-                // const result = await defaultInstace.post(`${process.env.NEXT_PUBLIC_API_URL}/Login/Login`, {
-                //     eMail: credentials.username,
-                //     password: credentials.password,
-                //     rePassword: credentials.password,
-                // }).then(data => {
-                //     return data?.data?.entity;
-                // }).catch((err) => {
-                //     return null;
-                // });
-
-                // return result;
-                return null;
+                return result;
 
             }
         })
@@ -42,9 +40,9 @@ export default NextAuth({
         // },
         async jwt({ token, user, account, profile, isNewUser }) {
             if (user) {
-                token.jwt = user.token;
-                token.email = user.eMail;
-                token.nameSurname = user.nameSurname;
+                token.jwt = user.jwt;
+                token.email = user.user.email;
+                token.nameSurname = user.user.NameSurname;
             }
             return Promise.resolve(token);
         },
