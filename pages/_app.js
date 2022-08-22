@@ -1,14 +1,17 @@
 import Layout from '@/Components/Layout';
 import { NextUIProvider } from '@nextui-org/react';
+import { SessionProvider } from "next-auth/react"
 import '../styles/globals.scss'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
   return (
-    <NextUIProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </NextUIProvider>
+    <SessionProvider session={session}>
+      <NextUIProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </NextUIProvider>
+    </SessionProvider>
   );
 
 }
