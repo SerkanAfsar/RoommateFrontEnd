@@ -1,9 +1,13 @@
 import React, { useContext } from "react";
 import styles from './index.module.scss';
 import Link from "next/link";
-import { AdminContext } from "../../../Context/AdminContext";
+;
+import { AdminContext } from "Context/AdminContext";
 import { useRouter } from 'next/router';
 import { signOut, useSession } from "next-auth/react"
+import { FaBeer, FaCity } from 'react-icons/fa';
+import { BsFillCheckCircleFill, BsFillQuestionCircleFill } from 'react-icons/bs';
+import { AdminRouteNames } from "@/Constants/AdminPageConstants";
 
 const AdminAside = ({ activePageName }) => {
     const { data: session } = useSession();
@@ -20,22 +24,39 @@ const AdminAside = ({ activePageName }) => {
 
             </div>
             <ul>
-                <li className={activePageName == "DashBoard" ? styles.active : ""}>
+                <li className={activePageName == AdminRouteNames.ANASAYFA ? styles.active : ""}>
                     <Link href="/Admin/Dashboard">
                         <a>
-                            <i className="bi bi-house-door-fill"></i>
-                            <span>Dashboard</span>
+                            <FaBeer color="#fff" />
+                            <span>{AdminRouteNames.ANASAYFA}</span>
                         </a>
                     </Link>
                 </li>
-                <li className={activePageName == "AdminEkle" ? styles.active : ""}>
-                    <Link href="/Admin/AdminEkle">
+                <li className={activePageName == AdminRouteNames.ILLER ? styles.active : ""}>
+                    <Link href="/Admin/Iller">
                         <a>
-                            <i className="bi bi-person-plus-fill"></i>
-                            <span>Admin Ekle</span>
+                            <FaCity color="#fff" />
+                            <span>{AdminRouteNames.ILLER}</span>
                         </a>
                     </Link>
                 </li>
+                <li className={activePageName == AdminRouteNames.ONAYLIILANLAR ? styles.active : ""}>
+                    <Link href="/Admin/OnayliIlanlar">
+                        <a>
+                            <BsFillCheckCircleFill color="#fff" />
+                            <span>{AdminRouteNames.ONAYLIILANLAR}</span>
+                        </a>
+                    </Link>
+                </li>
+                <li className={activePageName == AdminRouteNames.ONAYBEKLEYENILANLAR ? styles.active : ""}>
+                    <Link href="/Admin/OnayBekleyenIlanlar">
+                        <a>
+                            <BsFillQuestionCircleFill color="#fff" />
+                            <span>{AdminRouteNames.ONAYBEKLEYENILANLAR}</span>
+                        </a>
+                    </Link>
+                </li>
+
                 <li className={activePageName == "Adminler" ? styles.active : ""}>
                     <Link href="/Admin/Adminler">
                         <a>
@@ -60,6 +81,7 @@ const AdminAside = ({ activePageName }) => {
                         </a>
                     </Link>
                 </li>
+
                 <li className={activePageName == "Haber Ekle" ? styles.active : ""}>
                     <Link href="/Admin/HaberEkle">
                         <a>
