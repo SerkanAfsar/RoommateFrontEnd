@@ -5,7 +5,8 @@
       "@/styles/*": ["styles/*"],
       "@/Components/*": ["Components/*"],
       "@/Helpers/*": ["Helpers/*"],
-      "@/Utilities/*": ["Utilities/*"]
+      "@/Utilities/*": ["Utilities/*"],
+      "@/Constants/*": ["Constants/*"]
     }
   }
 }
