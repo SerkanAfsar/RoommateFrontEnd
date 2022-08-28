@@ -5,5 +5,6 @@ export const AdminRouteNames = {
     ONAYBEKLEYENILANLAR: "Onay Bekleyen İlanlar",
     ENGELLIILANLAR: "Engelli İlanlar",
     BLOG: "Blog",
-    KULLANICILAR: "Kullanıcılar"
+    KULLANICILAR: "Kullanıcılar",
+    KULLANICIEKLE: "Kullanıcı Ekle",
 }
