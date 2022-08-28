@@ -4,8 +4,10 @@ import { useSession } from "next-auth/react";
 import styles from './index.module.scss';
 import AlertModule from "@/Components/CustomComponents/AlertModule";
 import { AdminRouteNames } from "@/Constants/AdminPageConstants";
-
-const Dashboard = ({ result }) => {
+import { GetCityCount } from "Data/Cities.Controller";
+import { Grid } from "@nextui-org/react";
+import Statistics from "@/Components/AdminComponents/DashBoard/Statistics";
+const Dashboard = ({ cityCount }) => {
 
     const { data: session, status } = useSession();
 
@@ -44,18 +46,29 @@ const Dashboard = ({ result }) => {
     // }
     return (
         <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
-            {/* <DashboardMainComponent
-                categoryCountResult={categoryCountResult}
-                newsCountResult={newsCountResult} /> */}
-            Deneme 123
-        </AdminLayout>
+            <Grid.Container gap={2} justify="start">
+                <Grid xs={3}>
+                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                </Grid>
+                <Grid xs={3}>
+                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                </Grid>
+                <Grid xs={3}>
+                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                </Grid>
+                <Grid xs={3}>
+                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                </Grid>
+            </Grid.Container>
+        </AdminLayout >
     )
 }
 export const getStaticProps = async () => {
+    const cityCount = await GetCityCount(null);
 
     return {
         props: {
-            result: {}
+            cityCount
         },
         revalidate: 1
     }
