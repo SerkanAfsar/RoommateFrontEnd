@@ -16,7 +16,7 @@ const Statistics = ({ counterName, count }) => {
             </Card.Body>
             <Card.Divider />
 
-        </Card >
+        </Card>
 
     )
 }
