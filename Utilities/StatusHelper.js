@@ -12,8 +12,8 @@ export const StatusCodeHelper = (err) => {
     //     }
     //   }
 
-    if (err.response) {
-        switch (err.response.error.status) {
+    if (err?.response?.data?.error) {
+        switch (err.response.data.error.status) {
             case 401: {
                 return {
                     hasError: true,
@@ -29,16 +29,17 @@ export const StatusCodeHelper = (err) => {
             case 400: {
                 return {
                     hasError: true,
-                    errorList: err.response.data.errorList
+                    errorList: [err.response.data.error.message]
                 }
             }
             default: {
                 return {
                     hasError: true,
-                    errorList: err.response.data.errorList
+                    errorList: [err.response.data.error.message]
                 }
             }
         }
+
     }
 
     return {
