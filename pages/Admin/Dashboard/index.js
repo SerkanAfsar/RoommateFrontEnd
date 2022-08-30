@@ -7,9 +7,50 @@ import { AdminRouteNames } from "@/Constants/AdminPageConstants";
 import { GetCityCount } from "Data/Cities.Controller";
 import { Grid } from "@nextui-org/react";
 import Statistics from "@/Components/AdminComponents/DashBoard/Statistics";
-const Dashboard = ({ cityCount }) => {
+import { GetAdminAccessedAdvetisementCount, GetAdminNotAccessedAdvertisementCount } from "Data/Advertisements.Controller";
+import { GetDistictCount } from "Data/Disticts.Controller";
+import { GetUserCount } from "Data/Users.Controller";
+
+const Dashboard = ({ cityCount, adminAccessedAdvCount, adminNotAccessedAdvCount, distictCount, userCount }) => {
 
     const { data: session, status } = useSession();
+
+    if (cityCount?.hasError) {
+        return (
+            <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
+                <AlertModule items={cityCount.errorList} title="City Count Error" />
+            </AdminLayout>
+        )
+    }
+
+    if (adminAccessedAdvCount?.hasError) {
+        return (
+            <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
+                <AlertModule title={"Onaylı İlan Sayısı"} items={adminAccessedAdvCount.errorList} />
+            </AdminLayout>
+        )
+    }
+    if (adminNotAccessedAdvCount?.hasError) {
+        return (
+            <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
+                <AlertModule title={"Onay Bekleyen İlan Sayısı"} items={adminNotAccessedAdvCount.errorList} />
+            </AdminLayout>
+        )
+    }
+    if (distictCount?.hasError) {
+        return (
+            <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
+                <AlertModule title={"İlçe İlan Sayısı"} items={distictCount.errorList} />
+            </AdminLayout>
+        )
+    }
+    if (userCount?.hasError) {
+        return (
+            <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
+                <AlertModule title={"Kullanıcı Sayısı"} items={userCount.errorList} />
+            </AdminLayout>
+        )
+    }
 
     if (status === "loading") {
         return (
@@ -47,17 +88,20 @@ const Dashboard = ({ cityCount }) => {
     return (
         <AdminLayout activeLink={AdminRouteNames.ANASAYFA} activePageName={AdminRouteNames.ANASAYFA}>
             <Grid.Container gap={2} justify="start">
-                <Grid xs={3}>
+                <Grid xs={12} md={3}>
                     <Statistics counterName={"İl Sayısı"} count={cityCount} />
                 </Grid>
-                <Grid xs={3}>
-                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                <Grid xs={12} md={3}>
+                    <Statistics counterName={"Onaylı İlan Sayısı"} count={adminAccessedAdvCount} />
                 </Grid>
-                <Grid xs={3}>
-                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                <Grid xs={12} md={3}>
+                    <Statistics counterName={"Onay Bekleyen İlan Sayısı"} count={adminNotAccessedAdvCount} />
                 </Grid>
-                <Grid xs={3}>
-                    <Statistics counterName={"İl Sayısı"} count={cityCount} />
+                <Grid xs={12} md={3}>
+                    <Statistics counterName={"İlçe Sayısı"} count={distictCount} />
+                </Grid>
+                <Grid xs={12} md={3}>
+                    <Statistics counterName={"Kullanıcı Sayısı"} count={userCount} />
                 </Grid>
             </Grid.Container>
         </AdminLayout >
@@ -65,10 +109,18 @@ const Dashboard = ({ cityCount }) => {
 }
 export const getStaticProps = async () => {
     const cityCount = await GetCityCount(null);
+    const adminAccessedAdvCount = await GetAdminAccessedAdvetisementCount(null);
+    const adminNotAccessedAdvCount = await GetAdminNotAccessedAdvertisementCount(null);
+    const distictCount = await GetDistictCount(null);
+    const userCount = await GetUserCount(null);
 
     return {
         props: {
-            cityCount
+            cityCount,
+            adminAccessedAdvCount,
+            adminNotAccessedAdvCount,
+            distictCount,
+            userCount
         },
         revalidate: 1
     }
