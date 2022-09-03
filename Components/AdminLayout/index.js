@@ -6,7 +6,7 @@ import AdminAside from "./AdminAside";
 import AdminContent from "./AdminContent";
 import { AdminProvider } from "Context/AdminContext";
 
-const AdminLayout = ({ children, activePageName }) => {
+const AdminLayout = ({ children, activePageName, adminTitle }) => {
 
     const { data: session, status } = useSession();
     const [logSuccess, setLogSuccess] = useState(true);
@@ -43,7 +43,7 @@ const AdminLayout = ({ children, activePageName }) => {
         <AdminProvider>
             <AdminTopSide />
             <AdminAside activePageName={activePageName} />
-            <AdminContent activePageName={activePageName}>
+            <AdminContent activePageName={activePageName} adminTitle={adminTitle || activePageName}>
                 {children}
             </AdminContent>
             <ToastContainer />
