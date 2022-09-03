@@ -43,3 +43,39 @@ export const AddCity = async (tokenKey = null, CityName) => {
 
     });
 }
+
+export const UpdateCity = async (tokenKey = null, cityId, CityName) => {
+
+    return await ApiClient(tokenKey).put(`/cities/${cityId}`, {
+        data: {
+            CityName
+        }
+    }).then(resp => {
+        return {
+            id: resp.data.data.id,
+            CityName: resp.data.data.attributes.CityName
+        }
+    }).catch(err => {
+        const result = StatusCodeHelper(err);
+        return result;
+
+    });
+}
+
+export const DeleteCity = async (tokenKey = null, cityId) => {
+
+    return await ApiClient(tokenKey).delete(`/cities/${cityId}`, {
+        data: {
+            id: cityId
+        }
+    }).then(resp => {
+        return {
+            id: resp.data.data.id,
+            CityName: resp.data.data.attributes.CityName
+        }
+    }).catch(err => {
+        const result = StatusCodeHelper(err);
+        return result;
+
+    });
+}
