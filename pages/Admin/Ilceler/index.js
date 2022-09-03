@@ -3,8 +3,16 @@ import { AdminRouteNames } from "@/Constants/AdminPageConstants";
 import React, { useState } from "react";
 import { Table, Button, Tooltip, Row, Col, Container, Modal, Input, Text } from "@nextui-org/react";
 import styles from './index.module.scss';
+import { GetCityWithDistricts, AddDisctrict as AddProcess } from "Data/Disticts.Controller";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
-const Ilceler = ({ test, id }) => {
+
+const Ilceler = ({ cityWithDisctricts }) => {
+
+    const router = useRouter();
+
+    const [districtList, setDistrictlist] = useState(cityWithDisctricts?.DisctrictList || []);
     const [districtName, setDistrictName] = useState("");
     const [visible, setVisible] = useState(false);
 
@@ -17,31 +25,38 @@ const Ilceler = ({ test, id }) => {
 
     const saveDistrict = async (e) => {
         e.preventDefault();
+        if (!districtName) {
+            alert("İlçe Adını Giriniz!");
+            return;
+        }
 
-        // if (!cityName) {
-        //     alert("Enter City Name");
-        //     return;
-        // }
-        // const responseResult = await AddCity(null, cityName);
-        // if (responseResult?.hasError) {
-        //     responseResult?.errorList.forEach(err => {
-        //         toast.error(err, { position: "top-right" });
-        //     });
-        //     return;
-        // }
-        // setCities((items) => [...items, responseResult]);
+        const data = {
+            DistrictName: districtName,
+            city: cityWithDisctricts.CityId
+        };
 
-        // toast.success(`${responseResult.CityName} Eklendi`, { position: "top-right" });
-        // router.push(window.location.href);
-        // closeHandler();
+        const responseResult = await AddProcess(null, data);
+
+        if (responseResult?.hasError) {
+            responseResult?.errorList.forEach(err => {
+                toast.error(err, { position: "top-right" });
+            });
+            return;
+        }
+
+        setDistrictlist((items) => [...items, responseResult]);
+
+        toast.success(`${responseResult.DistrictName} Eklendi`, { position: "top-right" });
+        router.push(window.location.href);
+        closeHandler();
 
     }
 
     return (
-        <AdminLayout activePageName={AdminRouteNames.ILLER}>
+        <AdminLayout activePageName={AdminRouteNames.ILLER} adminTitle={`${cityWithDisctricts.CityName} İlçeler Listesi`}>
             <Container>
                 <Row justify="flex-end">
-                    <Button color="success" onPress={handler}>Yeni İlçe Ekle</Button>
+                    <Button color="success" onPress={handler}>{cityWithDisctricts.CityName}-Yeni İlçe Ekle</Button>
                 </Row>
             </Container>
             <Table
@@ -60,15 +75,12 @@ const Ilceler = ({ test, id }) => {
                     <Table.Column>SİL</Table.Column>
                 </Table.Header>
                 <Table.Body>
-                    {/* {cities.map((item, index) => (
-                        <Table.Row key={item.id}>
-                            <Table.Cell>{item.id}</Table.Cell>
-                            <Table.Cell>{item.CityName}</Table.Cell>
-                            <Table.Cell>
-                                <Tooltip content="İlçeler">
-                                    <Button onClick={() => router.push(`/Admin/Ilceler?id=${item.id}`)} color="secondary">İlçeler</Button>
-                                </Tooltip>
-                            </Table.Cell>
+                    {districtList?.map((item, index) => (
+                        <Table.Row key={item.DisctrictId}>
+                            <Table.Cell>{item.DisctrictId}</Table.Cell>
+                            <Table.Cell>{item.DistrictName}</Table.Cell>
+                            <Table.Cell>{cityWithDisctricts?.CityName}</Table.Cell>
+
                             <Table.Cell>
                                 <Tooltip content="Detay">
                                     <Button color="warning">Detay</Button>
@@ -80,7 +92,7 @@ const Ilceler = ({ test, id }) => {
                                 </Tooltip>
                             </Table.Cell>
                         </Table.Row>
-                    ))} */}
+                    ))}
                 </Table.Body>
                 <Table.Pagination
                     shadow
@@ -122,18 +134,18 @@ const Ilceler = ({ test, id }) => {
                     </Modal.Footer>
                 </form>
             </Modal>
-        </AdminLayout>
+        </AdminLayout >
     )
 }
 export default Ilceler;
 
-export const getServerSideProps = ({ query }) => {
+export const getServerSideProps = async ({ query }) => {
     const { id } = query;
-    console.log(id);
+    const cityWithDisctricts = await GetCityWithDistricts(null, id);
+    console.log(cityWithDisctricts);
     return {
         props: {
-            test: {},
-            id
+            cityWithDisctricts,
         }
     }
 }
