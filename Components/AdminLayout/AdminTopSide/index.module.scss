@@ -4,7 +4,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
+    position: sticky;
+    position: -webkit-sticky;
+    left: 0px;
+    top: 0px;
     background-color: #000;
     color: #ffff;
     top: 0px;
@@ -13,6 +16,7 @@
     padding: 0px 10px;
     z-index: 9;
     padding-left: 230px;
+    z-index: 999;
 
     &.closed {
         padding-left: 10px;
