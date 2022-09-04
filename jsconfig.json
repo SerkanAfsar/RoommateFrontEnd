@@ -6,7 +6,8 @@
       "@/Components/*": ["Components/*"],
       "@/Helpers/*": ["Helpers/*"],
       "@/Utilities/*": ["Utilities/*"],
-      "@/Constants/*": ["Constants/*"]
+      "@/Constants/*": ["Constants/*"],
+      "@/Enums/*": ["Enums/*"]
     }
   }
 }
