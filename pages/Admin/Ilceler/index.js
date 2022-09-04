@@ -3,7 +3,7 @@ import { AdminRouteNames } from "@/Constants/AdminPageConstants";
 import React, { useState } from "react";
 import { Table, Button, Tooltip, Row, Col, Container, Modal, Input, Text } from "@nextui-org/react";
 import styles from './index.module.scss';
-import { GetCityWithDistricts, AddDisctrict as AddProcess } from "Data/Disticts.Controller";
+import { GetCityWithDistricts, AddDisctrict as AddProcess, UpdateDisctrict as UpdateProcess, DeleteDisctrict as DeleteProcess } from "Data/Disticts.Controller";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
@@ -14,14 +14,24 @@ const Ilceler = ({ cityWithDisctricts }) => {
 
     const [districtList, setDistrictlist] = useState(cityWithDisctricts?.DisctrictList || []);
     const [districtName, setDistrictName] = useState("");
+    const [district, setDistrict] = useState({});
     const [visible, setVisible] = useState(false);
+    const [visibleUpdate, setVisibleUpdate] = useState(false);
 
     const handler = () => setVisible(true);
+    const updateHandler = () => setVisibleUpdate(true);
+
 
     const closeHandler = () => {
         setDistrictName("");
         setVisible(false);
     };
+
+    const updateCloseHandler = () => {
+        setDistrict({});
+        setVisibleUpdate(false);
+    };
+
 
     const saveDistrict = async (e) => {
         e.preventDefault();
@@ -36,7 +46,47 @@ const Ilceler = ({ cityWithDisctricts }) => {
         };
 
         const responseResult = await AddProcess(null, data);
+        if (responseResult?.hasError) {
+            responseResult?.errorList.forEach(err => {
+                toast.error(err, { position: "top-right" });
+            });
+            return;
+        }
+        setDistrictlist((items) => [...items, responseResult]);
+        toast.success(`${responseResult.DistrictName} Eklendi`, { position: "top-right" });
+        closeHandler();
 
+    }
+
+    const updateDistrict = async (e) => {
+        e.preventDefault();
+        if (!district.DistrictName) {
+            alert("İlçe Adını Giriniz!");
+            return;
+        }
+
+        const data = {
+            DistrictName: district.DistrictName
+        };
+
+        const responseResult = await UpdateProcess(null, district.DisctrictId, data);
+        if (responseResult?.hasError) {
+            responseResult?.errorList.forEach(err => {
+                toast.error(err, { position: "top-right" });
+            });
+            return;
+        }
+        const arr = districtList;
+        const item = arr[arr.findIndex(a => a.DisctrictId == responseResult.DisctrictId)];
+        item.DistrictName = responseResult.DistrictName;
+        setDistrictlist(arr);
+        toast.success(`${responseResult.DistrictName} Güncellendi!`, { position: "top-right" });
+        updateCloseHandler();
+
+    }
+
+    const deleteDistrict = async (districtId) => {
+        const responseResult = await DeleteProcess(null, districtId);
         if (responseResult?.hasError) {
             responseResult?.errorList.forEach(err => {
                 toast.error(err, { position: "top-right" });
@@ -44,12 +94,8 @@ const Ilceler = ({ cityWithDisctricts }) => {
             return;
         }
 
-        setDistrictlist((items) => [...items, responseResult]);
-
-        toast.success(`${responseResult.DistrictName} Eklendi`, { position: "top-right" });
-        router.push(window.location.href);
-        closeHandler();
-
+        toast.error(`${responseResult.DistrictName} Silindi`, { position: "top-right" });
+        setDistrictlist((items) => items.filter(a => a.DisctrictId != responseResult.DisctrictId));
     }
 
     return (
@@ -83,12 +129,15 @@ const Ilceler = ({ cityWithDisctricts }) => {
 
                             <Table.Cell>
                                 <Tooltip content="Detay">
-                                    <Button color="warning">Detay</Button>
+                                    <Button color="warning" onClick={(e) => {
+                                        setVisibleUpdate(true);
+                                        setDistrict(item);
+                                    }}>Detay</Button>
                                 </Tooltip>
                             </Table.Cell>
                             <Table.Cell>
                                 <Tooltip content="Sil">
-                                    <Button color="error">Sil</Button>
+                                    <Button color="error" onClick={async () => await deleteDistrict(item.DisctrictId)}>Sil</Button>
                                 </Tooltip>
                             </Table.Cell>
                         </Table.Row>
@@ -106,8 +155,7 @@ const Ilceler = ({ cityWithDisctricts }) => {
                 closeButton
                 aria-labelledby="modal-title"
                 open={visible}
-                onClose={closeHandler}
-            >
+                onClose={closeHandler}>
                 <form onSubmit={async (e) => await saveDistrict(e)}>
                     <Modal.Body>
                         <Input
@@ -130,6 +178,38 @@ const Ilceler = ({ cityWithDisctricts }) => {
                         </Button>
                         <Button auto type="submit" color="success">
                             Kaydet
+                        </Button>
+                    </Modal.Footer>
+                </form>
+            </Modal>
+
+            <Modal
+                closeButton
+                aria-labelledby="modal-title-update"
+                open={visibleUpdate}
+                onClose={updateCloseHandler}>
+                <form onSubmit={async (e) => await updateDistrict(e, district)}>
+                    <Modal.Body>
+                        <Input
+                            clearable
+                            bordered
+                            fullWidth
+                            type="text"
+                            color="primary"
+                            label="İlçe Adı"
+                            size="lg"
+                            placeholder="İlçe Adını Giriniz"
+                            value={district.DistrictName}
+                            onChange={(e) => setDistrict({ ...district, DistrictName: e.target.value })}
+                        />
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button auto flat color="error" onPress={updateCloseHandler}>
+                            Kapat
+                        </Button>
+                        <Button auto type="submit" color="success">
+                            Güncelle
                         </Button>
                     </Modal.Footer>
                 </form>
