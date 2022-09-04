@@ -10,4 +10,14 @@ export const GetUserCount = async (tokenKey = null) => {
 
         });
 }
+export const GetRoleTypes = async (tokenKey) => {
+    return await ApiClient(tokenKey).get(`/users-permissions/roles`)
+        .then(resp => {
+            return resp.data.roles
+        })
+        .catch(err => {
+            const result = StatusCodeHelper(err);
+            return result;
+        })
+}
 
