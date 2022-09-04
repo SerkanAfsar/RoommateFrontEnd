@@ -43,3 +43,34 @@ export const AddDisctrict = async (tokenKey, data) => {
         return result;
     });
 }
+export const UpdateDisctrict = async (tokenKey, districtId, data) => {
+
+    return await ApiClient(tokenKey).put(`/districts/${districtId}`, {
+        data
+    }).then(resp => {
+        return {
+            DistrictName: resp.data.data.attributes.DistrictName,
+            DisctrictId: resp.data.data.id
+        }
+    }).catch(err => {
+        const result = StatusCodeHelper(err);
+        return result;
+    });
+}
+
+export const DeleteDisctrict = async (tokenKey, districtId) => {
+
+    return await ApiClient(tokenKey).delete(`/districts/${districtId}`, {
+        data: {
+            id: districtId
+        }
+    }).then(resp => {
+        return {
+            DistrictName: resp.data.data.attributes.DistrictName,
+            DisctrictId: resp.data.data.id
+        }
+    }).catch(err => {
+        const result = StatusCodeHelper(err);
+        return result;
+    });
+}
