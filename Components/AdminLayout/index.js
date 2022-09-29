@@ -46,7 +46,7 @@ const AdminLayout = ({ children, activePageName, adminTitle }) => {
             <AdminContent activePageName={activePageName} adminTitle={adminTitle || activePageName}>
                 {children}
             </AdminContent>
-            <ToastContainer />
+
         </AdminProvider>
     );
 }
