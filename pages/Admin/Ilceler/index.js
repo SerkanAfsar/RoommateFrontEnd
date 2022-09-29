@@ -222,7 +222,7 @@ export default Ilceler;
 export const getServerSideProps = async ({ query }) => {
     const { id } = query;
     const cityWithDisctricts = await GetCityWithDistricts(null, id);
-    console.log(cityWithDisctricts);
+
     return {
         props: {
             cityWithDisctricts,

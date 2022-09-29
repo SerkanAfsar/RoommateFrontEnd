@@ -12,8 +12,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
       <NextUIProvider>
         <Layout>
           <Component {...pageProps} />
-          <ToastContainer />
         </Layout>
+        <ToastContainer />
       </NextUIProvider>
     </SessionProvider>
   );
