@@ -13,6 +13,7 @@ export const StatusCodeHelper = (err) => {
     //   }
 
     if (err?.response?.data?.error) {
+
         switch (err.response.data.error.status) {
             case 401: {
                 return {
